@@ -7,9 +7,36 @@ import PaymentModes from "../components/PaymentModes";
 import Amount from "../components/Amount";
 import isEmpty from "lodash/isEmpty";
 import { saveData } from "../redux/actions";
+import LineChart from "../components/LineChart";
 
 const transformData = data => {
   return data.map(item => ({ ...item, id: item._id }));
+};
+
+const transformChartData = data => {
+  const groupedData = data.reduce((acc, cur) => {
+    if (acc[cur.paymentMode]) {
+      acc[cur.paymentMode] = {
+        ...acc[cur.paymentMode],
+        data: [...acc[cur.paymentMode].data, cur.amount]
+      };
+    } else {
+      acc[cur.paymentMode] = { name: cur.paymentMode, data: [cur.amount] };
+    }
+    return acc;
+  }, {});
+
+  console.log(
+    Object.keys(groupedData).map(key => ({
+      name: key,
+      data: groupedData[key].data,
+      animation: false
+    }))
+  );
+  return Object.keys(groupedData).map(key => ({
+    name: key,
+    data: groupedData[key].data
+  }));
 };
 
 const Home = ({ name, form, store, data: propsData, saveData, isLoading }) => {
@@ -51,7 +78,6 @@ const Home = ({ name, form, store, data: propsData, saveData, isLoading }) => {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         saveData(values);
-        console.log("Received values of form: ", values);
       }
     });
   };
@@ -75,7 +101,7 @@ const Home = ({ name, form, store, data: propsData, saveData, isLoading }) => {
     ) {
       setDisabled(false);
     }
-  }, [form.getFieldsValue()]);
+  }, [form]);
 
   const { getFieldDecorator } = form;
 
@@ -120,7 +146,16 @@ const Home = ({ name, form, store, data: propsData, saveData, isLoading }) => {
       </Form>
       <Row>
         <Spin spinning={isEmpty(data) || isLoading}>
-          <Table columns={columns} dataSource={data} />
+          <Table
+            columns={columns}
+            dataSource={data}
+            pagination={{ pageSize: 5 }}
+          />
+        </Spin>
+      </Row>
+      <Row>
+        <Spin spinning={isEmpty(data) || isLoading}>
+          <LineChart chartData={transformChartData(data)} />
         </Spin>
       </Row>
     </div>

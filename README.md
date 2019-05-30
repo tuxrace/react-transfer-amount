@@ -10,6 +10,7 @@ An app that transfer amount.
 - Redux Saga
 - Ant Design
 - Ant Design Validation
+- Mongo DB
 
 ## To run the app
 

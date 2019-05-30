@@ -12,6 +12,7 @@ app.prepare().then(() => {
   const server = express();
   server.use(bodyParser.urlencoded({ extended: false }));
   server.use(bodyParser.json());
+
   const connString =
     "mongodb://user:password1@ds263156.mlab.com:63156/transfers";
   mongoose.connect(connString, { useNewUrlParser: true });
@@ -26,19 +27,15 @@ app.prepare().then(() => {
 
   server.get("/api/transfers", async (req, res) => {
     const query = Transfer.find();
-
     const result = await query.exec();
-    console.log(result);
 
     return res.json(result);
   });
 
   server.post("/api/transfers", async (req, res) => {
     const query = new Transfer(req.body);
-
     const result = await query.save();
 
-    console.log(result);
     return res.json([{ status: "saved" }]);
   });
 
