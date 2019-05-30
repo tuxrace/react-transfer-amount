@@ -11,6 +11,7 @@ An app that transfer amount.
 - Ant Design
 - Ant Design Validation
 - Mongo DB
+- HighCharts
 
 ## To run the app
 
