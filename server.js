@@ -26,7 +26,7 @@ app.prepare().then(() => {
   const Transfer = mongoose.model("Transfer", transfersSchema);
 
   server.get("/api/transfers", async (req, res) => {
-    const query = Transfer.find();
+    const query = Transfer.find().sort({ _id: -1 });
     const result = await query.exec();
 
     return res.json(result);

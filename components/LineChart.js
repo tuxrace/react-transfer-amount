@@ -12,7 +12,9 @@ const LineChart = ({ chartData }) => {
       text: "Line Chart"
     },
     yAxis: {
-      title: "Amount"
+      title: {
+        text: "Amount"
+      }
     },
     series: chartData
   };

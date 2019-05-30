@@ -32,56 +32,54 @@ const transformChartData = data => {
   }));
 };
 
+const userNames = [
+  { name: "USER - A" },
+  { name: "USER - B" },
+  { name: "USER - C" }
+];
+const paymentModes = [
+  { mode: "American Express" },
+  { mode: "VISA" },
+  { mode: "DBS PayLa" }
+];
+const columns = [
+  {
+    title: "Transaction Id",
+    dataIndex: "id",
+    key: "id"
+  },
+  {
+    title: "User Name",
+    dataIndex: "userName",
+    key: "userName"
+  },
+  {
+    title: "Payment Mode",
+    dataIndex: "paymentMode",
+    key: "paymentMode"
+  },
+  {
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount"
+  }
+];
+
+const validateAmount = (rule, value, callback) => {
+  if (value && value > 5000) {
+    callback("Cannot proceed amount is greater than 5000");
+  } else {
+    callback();
+  }
+};
+
 const Home = ({ name, form, store, data: propsData, saveData, isLoading }) => {
-  const userNames = [
-    { name: "USER - A" },
-    { name: "USER - B" },
-    { name: "USER - C" }
-  ];
-  const paymentModes = [
-    { mode: "American Express" },
-    { mode: "VISA" },
-    { mode: "DBS PayLa" }
-  ];
-  const columns = [
-    {
-      title: "Transaction Id",
-      dataIndex: "id",
-      key: "id"
-    },
-    {
-      title: "User Name",
-      dataIndex: "userName",
-      key: "userName"
-    },
-    {
-      title: "Payment Mode",
-      dataIndex: "paymentMode",
-      key: "paymentMode"
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount"
-    }
-  ];
+  const { getFieldDecorator } = form;
+  let data = [];
 
-  const handleClick = e => {
-    e.preventDefault();
-    form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        saveData(values);
-      }
-    });
-  };
-
-  const validateAmount = (rule, value, callback) => {
-    if (value && value > 5000) {
-      callback("Cannot proceed amount is greater than 5000");
-    } else {
-      callback();
-    }
-  };
+  if (!isEmpty(propsData)) {
+    data = transformData(propsData);
+  }
 
   const [disabled, setDisabled] = useState(true);
 
@@ -96,13 +94,15 @@ const Home = ({ name, form, store, data: propsData, saveData, isLoading }) => {
     }
   }, [form]);
 
-  const { getFieldDecorator } = form;
-
-  let data = [];
-
-  if (!isEmpty(propsData)) {
-    data = transformData(propsData);
-  }
+  const handleClick = e => {
+    e.preventDefault();
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        saveData(values);
+        form.resetFields();
+      }
+    });
+  };
 
   return (
     <div>
