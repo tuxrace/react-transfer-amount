@@ -10,7 +10,7 @@ import { saveData } from "../redux/actions";
 import LineChart from "../components/LineChart";
 
 const transformData = data => {
-  return data.map(item => ({ ...item, id: item._id }));
+  return data.map(item => ({ ...item, id: item._id, key: item._id }));
 };
 
 const transformChartData = data => {
@@ -26,13 +26,6 @@ const transformChartData = data => {
     return acc;
   }, {});
 
-  console.log(
-    Object.keys(groupedData).map(key => ({
-      name: key,
-      data: groupedData[key].data,
-      animation: false
-    }))
-  );
   return Object.keys(groupedData).map(key => ({
     name: key,
     data: groupedData[key].data

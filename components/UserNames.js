@@ -14,10 +14,10 @@ const UserNames = ({ names, getFieldDecorator }) => {
       })(
         <Radio.Group buttonStyle="solid">
           {names.map(item => (
-            <>
+            <div key={item.name}>
               <Radio.Button value={item.name}>{item.name}</Radio.Button>
               <br />
-            </>
+            </div>
           ))}
         </Radio.Group>
       )}

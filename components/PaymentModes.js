@@ -14,10 +14,10 @@ const PaymentModes = ({ modes, getFieldDecorator }) => {
       })(
         <Radio.Group buttonStyle="solid">
           {modes.map(item => (
-            <>
+            <div key={item.mode}>
               <Radio value={item.mode}>{item.mode}</Radio>
               <br />
-            </>
+            </div>
           ))}
         </Radio.Group>
       )}
